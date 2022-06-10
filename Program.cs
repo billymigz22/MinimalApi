@@ -26,12 +26,29 @@ async Task<List<SuperHero>> GetAllHeroes(DataContext context) =>
 
 app.MapGet("/", () => "Welcome to the Super Hero DB! ❤");
 
-app.MapGet("/superhero", async (DataContext context) => await context.SuperHeroes.ToListAsync());
+app.MapGet("/superhero", async (DataContext context) => {
+    //return await context.SuperHeroes
+    // .Include(SuperHero => SuperHero.Locations)
+    //     .ToListAsync();
 
-app.MapGet("/superhero/{id}", async (DataContext context, int id) => 
-    await context.SuperHeroes.FindAsync(id) is SuperHero hero ? 
-        Results.Ok(hero) : 
-        Results.NotFound("Sorry, Hero Not Found!"));
+    return await context.Locations
+        .Include(Location => Location.SuperHero)
+        .ToListAsync();
+
+});
+
+app.MapGet("/superhero/{FirstName1}/{Lastname1}", async (DataContext context, string FirstName1, string LastName1) => {
+    //await context.SuperHeroes.FindAsync(id) is SuperHero hero ? 
+    //    Results.Ok(hero) : 
+    //    Results.NotFound("Sorry, Hero Not Found!"));
+        
+    var result = await context.SuperHeroes
+                .Where(x => x.FirstName == FirstName1 && x.LastName == LastName1)
+                .ToListAsync();
+
+    return Results.Ok(result);
+
+});
 
 app.MapPost("/superhero", async (DataContext context, SuperHero hero) =>
 {
@@ -41,7 +58,7 @@ app.MapPost("/superhero", async (DataContext context, SuperHero hero) =>
     return Results.Ok(await GetAllHeroes(context));
 });
 
-app.MapPut("/supoerhero/{id}", async(DataContext context, SuperHero hero, int id) =>
+app.MapPut("/superhero/{id}", async(DataContext context, SuperHero hero, int id) =>
 {
     var dbHero = await context.SuperHeroes.FindAsync(id);
 

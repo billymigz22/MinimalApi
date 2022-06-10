@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MinimalApi;
 
@@ -10,9 +11,10 @@ using MinimalApi;
 namespace MinimalApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220610035140_Add-Location")]
+    partial class AddLocation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,28 +22,6 @@ namespace MinimalApi.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("MinimalApi.Location", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SuperHeroId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SuperHeroId");
-
-                    b.ToTable("Locations");
-                });
 
             modelBuilder.Entity("MinimalApi.SuperHero", b =>
                 {
@@ -66,17 +46,6 @@ namespace MinimalApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SuperHeroes");
-                });
-
-            modelBuilder.Entity("MinimalApi.Location", b =>
-                {
-                    b.HasOne("MinimalApi.SuperHero", "SuperHero")
-                        .WithMany()
-                        .HasForeignKey("SuperHeroId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("SuperHero");
                 });
 #pragma warning restore 612, 618
         }

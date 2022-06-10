@@ -10,5 +10,7 @@ namespace MinimalApi
         }
 
         public DbSet<SuperHero> SuperHeroes => Set<SuperHero>();
+
+        public DbSet<Location> Locations => Set<Location>();
     }
 }

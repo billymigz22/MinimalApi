@@ -7,5 +7,8 @@
         public string LastName { get; set; } = string.Empty;
         public string HeroName { get; set; } = string.Empty;
 
+        public List<Location> Locations;
+
     }
+
 }
